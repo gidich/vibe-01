@@ -1,0 +1,62 @@
+trigger:
+  - main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "22.x"
+    displayName: "Use Node.js 22"
+
+  - script: corepack enable
+    displayName: "Enable Corepack"
+
+  - script: corepack prepare pnpm@9.15.4 --activate
+    displayName: "Activate pnpm"
+
+  - script: pnpm install --frozen-lockfile
+    displayName: "Install dependencies"
+
+  - script: pnpm build
+    displayName: "Build"
+
+  - script: pnpm test
+    displayName: "Test"
+
+  - script: pnpm biome:check
+    displayName: "Biome"
+
+  - script: pnpm knip
+    displayName: "Knip"
+
+  - script: pnpm audit
+    displayName: "pnpm audit"
+
+  - script: pnpm snyk
+    displayName: "Snyk"
+    condition: and(succeeded(), ne(variables['SNYK_TOKEN'], ''))
+    env:
+      SNYK_TOKEN: $(SNYK_TOKEN)
+
+  - script: pnpm sonar
+    displayName: "SonarCloud"
+    condition: and(succeeded(), ne(variables['SONAR_TOKEN'], ''))
+    env:
+      SONAR_TOKEN: $(SONAR_TOKEN)
+
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: "deploy"
+      includeRootFolder: false
+      archiveFile: "$(Build.ArtifactStagingDirectory)/functionapp.zip"
+      replaceExistingArchive: true
+    displayName: "Archive deploy output"
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: "$(Build.ArtifactStagingDirectory)/functionapp.zip"
+      ArtifactName: "functionapp"
+      publishLocation: "Container"
+    displayName: "Publish artifact"

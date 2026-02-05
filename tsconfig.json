@@ -1,0 +1,9 @@
+{
+	"extends": "@tsconfig/strictest/tsconfig.json",
+	"files": [],
+	"references": [
+		{ "path": "./packages/interfaces" },
+		{ "path": "./packages/time-impl" },
+		{ "path": "./packages/core-functions" }
+	]
+}

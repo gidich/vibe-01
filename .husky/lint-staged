@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+
+pnpm biome:fix
+pnpm biome:check
+pnpm lint-staged
+pnpm test
+pnpm knip

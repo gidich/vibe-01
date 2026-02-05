@@ -1,0 +1,23 @@
+{
+	"name": "@app/core-functions",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"main": "./dist/index.js",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		}
+	},
+	"types": "./dist/index.d.ts",
+	"files": ["dist", "host.json", "time"],
+	"dependencies": {
+		"@app/interfaces": "workspace:*",
+		"@app/time-impl": "workspace:*",
+		"@azure/functions": "^4.5.0"
+	},
+	"scripts": {
+		"build": "tsc -b"
+	}
+}

@@ -1,0 +1,10 @@
+{
+	"$schema": "https://unpkg.com/knip@latest/schema.json",
+	"workspaces": {
+		"packages/*": {
+			"project": "tsconfig.json"
+		}
+	},
+	"ignoreBinaries": ["func"],
+	"ignore": ["rolldown.config.mjs"]
+}

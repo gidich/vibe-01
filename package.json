@@ -1,0 +1,43 @@
+{
+	"name": "azure-functions-v4-monorepo",
+	"private": true,
+	"type": "module",
+	"packageManager": "pnpm@9.15.4",
+	"engines": {
+		"node": ">=22 <23"
+	},
+	"scripts": {
+		"dev": "concurrently -k -n tsc,host -c cyan,magenta \"pnpm tsc -b -w\" \"pnpm host\"",
+		"host": "func start --script-root packages/core-functions --worker-runtime node",
+		"tsc": "tsc -b",
+		"build": "pnpm tsc -b && rolldown -c && node scripts/prepare-deploy.mjs",
+		"clean": "rimraf packages/*/dist deploy",
+		"test": "pnpm tsc -b && vitest run",
+		"biome:check": "biome check .",
+		"biome:fix": "biome check . --write",
+		"knip": "knip",
+		"audit": "pnpm audit",
+		"snyk": "snyk test",
+		"sonar": "sonar-scanner",
+		"lint-staged": "lint-staged",
+		"prepare": "husky"
+	},
+	"lint-staged": {
+		"*.{ts,tsx,js,jsx,json,md,yml,yaml}": ["biome check --write"]
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"@tsconfig/node22": "^22.0.2",
+		"@tsconfig/strictest": "^2.0.5",
+		"concurrently": "^8.2.2",
+		"husky": "^9.0.11",
+		"knip": "^5.39.0",
+		"lint-staged": "^15.3.0",
+		"rimraf": "^6.0.1",
+		"rolldown": "^1.0.0-rc.3",
+		"sonar-scanner": "^3.1.0",
+		"snyk": "^1.1300.0",
+		"typescript": "5.9.3",
+		"vitest": "^2.1.9"
+	}
+}
