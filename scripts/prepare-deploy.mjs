@@ -6,17 +6,15 @@ const root = dirname(fileURLToPath(import.meta.url));
 const repoRoot = dirname(root);
 const deployDir = join(repoRoot, "deploy");
 
-async function ensureCleanDir(path) {
-	await fs.rm(path, { recursive: true, force: true });
-	await fs.mkdir(path, { recursive: true });
-}
-
 async function copyFile(src, dest) {
 	await fs.mkdir(dirname(dest), { recursive: true });
 	await fs.copyFile(src, dest);
 }
 
-await ensureCleanDir(deployDir);
+await fs.mkdir(deployDir, { recursive: true });
+await fs.rm(join(deployDir, "time"), { recursive: true, force: true });
+await fs.rm(join(deployDir, "host.json"), { force: true });
+await fs.rm(join(deployDir, "package.json"), { force: true });
 
 await copyFile(
 	join(repoRoot, "packages/core-functions/host.json"),
